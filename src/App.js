@@ -4,7 +4,8 @@ import apiKey from './config.js';
 import {
   BrowserRouter,
   Route,
-  Switch
+  Switch,
+  Redirect
 } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,52 +15,26 @@ import Nav from './components/Nav';
 import PhotoGallery from './components/PhotoGallery';
 import NotFound from './components/NotFound'
 
-
-// const App = () => (
-//   <BrowserRouter>
-//     <div className="container">
-//       <SearchForm />
-//       <Nav />
-
-//       <Switch>
-//         <Route exact path="/" render={ () => <PhotoGallery palabra="mountains" /> } />
-//         <Route exact path="/mountains" render={ () => <PhotoGallery palabra="mountains" /> } />
-//         <Route path="/ocean" render={ () => <PhotoGallery palabra="ocean" /> } />
-//         <Route path="/dogs"  render={ () => <PhotoGallery palabra="dogs" /> } />
-//         <Route component={NotFound} />
-//       </Switch>
-//     </div>
-//   </BrowserRouter>
-// );
-
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
       photos: [],
-      initialData: [],
-      loading: true
+      initialData: {}
     };
   }
   
   componentDidMount(){
-    console.log("fired!");
     this.getInitialData();
   }
 
   performSearch = (query = 'mountains') => {
-    console.log(query);
+    // console.log(query);
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
           photos: response.data.photos.photo
         });
-      })
-      .then( () => {
-        this.setState( prevState => ({
-          initialData: [...prevState.initialData, this.state.photos]
-        }));
-        console.log(this.state.initialData);
       })
       .catch(error => {
         console.log('Error fetching and parsing data', error);
@@ -67,27 +42,50 @@ export default class App extends Component {
   }
 
   getInitialData = () => {
+    // Get Url
+    const currentUrl = window.location.href;
+    // Separate each section of the Url
+    const currentQuery = currentUrl.split("/");
+    //initialize photos state, in case the user reloads the page, and needs the actual query to render again
+    //otherwise will not match the url and won't display anything
+    this.performSearch(currentQuery[currentQuery.length - 1]);
+    //request initial data
     const ul = document.querySelector(".main-nav ul");
     let navLinks = ul.children;
     navLinks = Array.prototype.slice.call(navLinks);
     navLinks.forEach( navLink => {
-      this.performSearch(navLink.textContent.toLowerCase());
+      const query = navLink.textContent.toLowerCase();
+      axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
+        .then( response => {
+          this.setState( prevState => ({
+            initialData: {...prevState.initialData, [query]: response.data.photos.photo},
+          }));
+        })
+        .catch(error => {
+          console.log('Error fetching and parsing initial data', error);
+        });
     });
   }
 
   render() {
+    // console.log(this.props);
     return (
       <BrowserRouter>
         <div className="container">
           <SearchForm onSearch={this.performSearch}/>
           <Nav />
-
-          <Switch>
-            <Route exact path="/" render={ () => <PhotoGallery /> } />
-            <Route path="/ocean" render={ () => <PhotoGallery /> } />
-            <Route path="/dogs"  render={ () => <PhotoGallery /> } />
-            <Route component={NotFound} />
-          </Switch>
+          {this.state.initialData ? 
+            <Switch>
+              <Route exact path="/" render={ () => <Redirect to="/mountains" /> } />
+              <Route exact path="/mountains" render={ () => <PhotoGallery data={this.state.initialData.mountains} /> } />
+              <Route exact path="/ocean" render={ () => <PhotoGallery data={this.state.initialData.ocean} /> } />
+              <Route exact path="/dogs"  render={ () => <PhotoGallery data={this.state.initialData.dogs} /> } />
+              <Route exact path="/:query" render={ () => <PhotoGallery data={this.state.photos} /> } />
+              <Route component={NotFound} />
+            </Switch>
+            :
+            <div className="loader"></div>
+          }
         </div>
       </BrowserRouter>
     );
