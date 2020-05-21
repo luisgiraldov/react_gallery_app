@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
 body {
   text-align: center;
   font-family: 'Open Sans', sans-serif;
@@ -91,6 +93,31 @@ input {
 
 .photo-container .not-found {
   width: 100%;
+}
+/* 404 page */
+.page-not-found {
+  font-family: 'Ubuntu', sans-serif;
+  position: relative;
+  height: 300px;
+}
+
+.page-not-found .center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  /* color: #438bbd; */
+  color: #275270;
+  text-align: center;
+}
+
+.page-not-found h1 {
+  font-size: 8em;
+  line-height: 0em;
+}
+
+.page-not-found h2 {
+  font-size: 4em;
 }
 
 /* Loading animation */

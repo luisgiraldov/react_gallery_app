@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 class SearchForm extends Component {
   state = {
     searchText: "",
-    redirect: false
+    redirecting: null
   }
 
   onSearchChange = event => {
@@ -14,8 +14,10 @@ class SearchForm extends Component {
   }
 
   handleSubmit = event => {
-    this.prueba = <Redirect to={`/${this.query.value}`} />;
     event.preventDefault();
+    this.setState({ 
+      redirecting: <Redirect to={`/${this.query.value}`} />
+    });
     this.props.onSearch(this.query.value);
     event.currentTarget.reset();
   }
@@ -35,7 +37,7 @@ class SearchForm extends Component {
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
           </button>
-          {this.prueba ? this.prueba : ""}
+          {this.state.redirecting ? this.state.redirecting : ""}
         </form>
     );
   }

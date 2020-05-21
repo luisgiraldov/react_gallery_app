@@ -13,14 +13,15 @@ import axios from 'axios';
 import SearchForm from './components/SearchForm';
 import Nav from './components/Nav';
 import PhotoGallery from './components/PhotoGallery';
-import NotFound from './components/NotFound'
+import PageNotFound from './components/PageNotFound';
 
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
       photos: [],
-      initialData: {}
+      initialData: {},
+      title: ""
     };
   }
   
@@ -29,11 +30,15 @@ export default class App extends Component {
   }
 
   performSearch = (query = 'mountains') => {
-    // console.log(query);
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
-          photos: response.data.photos.photo
+          photos: {
+            [query]: {
+                photos: response.data.photos.photo,
+                title: query,
+            }
+          }
         });
       })
       .catch(error => {
@@ -58,7 +63,12 @@ export default class App extends Component {
       axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
         .then( response => {
           this.setState( prevState => ({
-            initialData: {...prevState.initialData, [query]: response.data.photos.photo},
+            initialData: {...prevState.initialData, 
+                          [query]: {
+                                    photos : response.data.photos.photo,
+                                    title: query
+                                   }
+                         }
           }));
         })
         .catch(error => {
@@ -68,7 +78,6 @@ export default class App extends Component {
   }
 
   render() {
-    // console.log(this.props);
     return (
       <BrowserRouter>
         <div className="container">
@@ -80,8 +89,12 @@ export default class App extends Component {
               <Route exact path="/mountains" render={ () => <PhotoGallery data={this.state.initialData.mountains} /> } />
               <Route exact path="/ocean" render={ () => <PhotoGallery data={this.state.initialData.ocean} /> } />
               <Route exact path="/dogs"  render={ () => <PhotoGallery data={this.state.initialData.dogs} /> } />
-              <Route exact path="/:query" render={ () => <PhotoGallery data={this.state.photos} /> } />
-              <Route component={NotFound} />
+              <Route exact path="/:query" render={ ({ match }) => {
+                                                                    const query = match.params.query;
+                                                                    return <PhotoGallery data={this.state.photos[query]} />
+                                                                  } 
+                                                 } />
+              <Route component={PageNotFound} />
             </Switch>
             :
             <div className="loader"></div>
@@ -92,6 +105,3 @@ export default class App extends Component {
   }
 
 }
-
-
-// export default App;
