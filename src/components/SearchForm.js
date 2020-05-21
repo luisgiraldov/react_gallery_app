@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 class SearchForm extends Component {
+
   state = {
     searchText: "",
     redirecting: null
@@ -15,10 +16,9 @@ class SearchForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({ 
-      redirecting: <Redirect to={`/${this.query.value}`} />
-    });
+    const { history } = this.props;
     this.props.onSearch(this.query.value);
+    history.push(`/${this.query.value}`);
     event.currentTarget.reset();
   }
 
@@ -37,10 +37,9 @@ class SearchForm extends Component {
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
           </button>
-          {this.state.redirecting ? this.state.redirecting : ""}
         </form>
     );
   }
 }
 
-export default SearchForm;
+export default withRouter(SearchForm);

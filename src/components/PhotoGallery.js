@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import NotFound from './NotFound';
+import Photo from './Photo';
 
 
 class PhotoGallery extends Component {
-
-    imgError = image => {
-        image.onError = "";
-        image.src = "../images/broken-link.png";
-        return true;
-    }
 
     render () {
         let photos = [];
@@ -25,14 +20,7 @@ class PhotoGallery extends Component {
                 {!this.props.data ? 
                     <div className="loader"></div> 
                     :   <ul>
-                            { photos.length > 0 ? photos.map( picture => {
-                                return  <li key={picture.id}>
-                                            <img src={`https://farm${picture.farm}.staticflickr.com/${picture.server}/${picture.id}_${picture.secret}_c.jpg`} alt={`${picture.title}`} 
-                                                onError={(event) => {
-                                                this.imgError(event.target);
-                                                }} />
-                                        </li>
-                                }) 
+                            { photos.length > 0 ? photos.map( picture =>  <Photo data={picture} key={picture.id}/>) 
                                 : <NotFound />       
                             }
                         </ul>

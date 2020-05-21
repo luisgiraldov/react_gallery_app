@@ -29,6 +29,12 @@ export default class App extends Component {
     this.getInitialData();
   }
 
+  validateState = (query) => {
+    if(query !== "It is valid") {
+      this.performSearch(query);
+    }
+  }
+
   performSearch = (query = 'mountains') => {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
@@ -81,7 +87,7 @@ export default class App extends Component {
     return (
       <BrowserRouter>
         <div className="container">
-          <SearchForm onSearch={this.performSearch}/>
+          <SearchForm onSearch={this.performSearch} />
           <Nav />
           {this.state.initialData ? 
             <Switch>
@@ -91,6 +97,9 @@ export default class App extends Component {
               <Route exact path="/dogs"  render={ () => <PhotoGallery data={this.state.initialData.dogs} /> } />
               <Route exact path="/:query" render={ ({ match }) => {
                                                                     const query = match.params.query;
+                                                                    // Validate if the url matches the photos' state, 
+                                                                    //when the user presses the browser's back button to display the correct photos
+                                                                    this.validateState(this.state.photos[query] ? "It is valid" : query);
                                                                     return <PhotoGallery data={this.state.photos[query]} />
                                                                   } 
                                                  } />
