@@ -95,7 +95,7 @@ export default class App extends Component {
               <Route exact path="/mountains" render={ () => <PhotoGallery data={this.state.initialData.mountains} /> } />
               <Route exact path="/ocean" render={ () => <PhotoGallery data={this.state.initialData.ocean} /> } />
               <Route exact path="/dogs"  render={ () => <PhotoGallery data={this.state.initialData.dogs} /> } />
-              <Route exact path="/:query" render={ ({ match }) => {
+              <Route exact path="/search/:query" render={ ({ match }) => {
                                                                     const query = match.params.query;
                                                                     // Validate if the url matches the photos' state, 
                                                                     //when the user presses the browser's back button to display the correct photos

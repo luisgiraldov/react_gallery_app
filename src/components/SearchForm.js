@@ -18,7 +18,7 @@ class SearchForm extends Component {
     event.preventDefault();
     const { history } = this.props;
     this.props.onSearch(this.query.value);
-    history.push(`/${this.query.value}`);
+    history.push(`/search/${this.query.value}`);
     event.currentTarget.reset();
   }
 
