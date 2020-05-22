@@ -1,3 +1,74 @@
+# React Gallery App
+
+You can search photos that are served by the Flickr API
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+
+### Prerequisites
+
+```
+npm
+```
+
+### Installing
+
+A step by step series of examples that tell you how to get a development env running for this project
+
+If you need a reference on how to install npm, you can go to:
+* [How to Install Node and npm](http://treehouse.github.io/installation-guides/)
+
+* Download the project files, [here is the link if you need it](https://github.com/luisgiraldov/react_gallery_app)
+* Open your terminal/console and make sure to be inside the project folder.
+for example
+```
+cd downloads/project_folder
+```
+
+* Then type in your terminal/console
+```
+npm install 
+```
+That will install all project's dependencies
+
+* Start your server by typing:
+```
+npm start
+```
+
+* npm will open up a tab with the app running or simply go to your browser and type http://localhost:3000/
+
+## Built With
+
+* [npm](https://www.npmjs.com/) - Dependency Management
+* [Git](https://git-scm.com/) - Version Control System
+* [React](https://reactjs.org/) - A JavaScript library for building user interfaces
+* [React Router](https://reacttraining.com/react-router/) - React Router is a collection of navigational components that compose declaratively with your application
+* [Axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and node.js
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Authors
+
+* **Lee Vaughn** - *Initial work* - [Teamtreehouse](https://teamtreehouse.com)
+* **Robert Manolis** - *Initial work* - [Teamtreehouse](https://teamtreehouse.com)
+* **Luis Giraldo** - *Functional Logic, Animations, Styling* - [Building Portfolio](https://luisgiraldov.com)
+
+## License
+
+This project is licensed under the MIT License
+
+## Acknowledgments
+
+* [Loading Animation](https://www.w3schools.com/howto/howto_css_loader.asp)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
